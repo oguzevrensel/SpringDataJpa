@@ -1,12 +1,16 @@
 package com.example.Datajpa;
 
 import javax.persistence.*;
-
+import static javax.persistence.GenerationType.SEQUENCE;
 @Entity(name = "Student")
 @Table(
-        name = "student"
+        name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "student_email_unique", columnNames = "email")
+        }
 )
 public class Student {
+
     @Id
     @SequenceGenerator(
             name = "student_sequence",
@@ -14,7 +18,7 @@ public class Student {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = SEQUENCE,
             generator = "student_sequence"
     )
     @Column(
@@ -22,12 +26,14 @@ public class Student {
             updatable = false
     )
     private Long id;
+
     @Column(
             name = "first_name",
             nullable = false,
             columnDefinition = "TEXT"
     )
     private String firstName;
+
     @Column(
             name = "last_name",
             nullable = false,
@@ -38,22 +44,21 @@ public class Student {
     @Column(
             name = "email",
             nullable = false,
-            columnDefinition = "TEXT",
-            unique = true
+            columnDefinition = "TEXT"
     )
     private String email;
+
     @Column(
             name = "age",
             nullable = false
+
     )
     private Integer age;
 
-    public Student(Long id,
-                   String firstName,
+    public Student(String firstName,
                    String lastName,
                    String email,
                    Integer age) {
-        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -61,6 +66,7 @@ public class Student {
     }
 
     public Student() {
+
     }
 
     public Long getId() {
